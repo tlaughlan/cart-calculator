@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration status="WARN">
+    <Properties>
+        <property name="logFileNamePattern">logs/${date:dd-MM-yyyy_hh-mm-ss}_cart-calculator.log</property>
+        <property name="linePattern">%d [%t] %-5level %logger{36} - %msg%n%throwable</property>
+    </Properties>
+    <Appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout pattern="${linePattern}"/>
+        </Console>
+        <File name="logFile" fileName="${logFileNamePattern}">
+            <PatternLayout pattern="${linePattern}"/>
+        </File>
+    </Appenders>
+    <Loggers>
+        <Root level="ALL">
+            <AppenderRef ref="console"/>
+            <AppenderRef ref="logFile"/>
+        </Root>
+    </Loggers>
+</Configuration>
