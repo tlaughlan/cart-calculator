@@ -16,7 +16,7 @@ public class App {
 
     public static void main(String[] args) {
         if (args.length != 2) {
-            System.out.println("Please specify two arguments: a cart json file, and a base prices json file.");
+            logger.error("Please specify two arguments: a cart json file, and a base prices json file.");
             return;
         }
 
