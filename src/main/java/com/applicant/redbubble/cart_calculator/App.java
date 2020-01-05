@@ -1,5 +1,6 @@
 package com.applicant.redbubble.cart_calculator;
 
+import com.applicant.redbubble.cart_calculator.models.BasePrice;
 import com.applicant.redbubble.cart_calculator.models.Product;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -20,10 +21,13 @@ public class App {
             return;
         }
 
+        List<Product> cart;
+        List<BasePrice> prices;
+
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            File cartFile = new File(args[0]);
-            List<Product> cart = objectMapper.readValue(cartFile, new TypeReference<List<Product>>(){});
+            cart = objectMapper.readValue(new File(args[0]), new TypeReference<List<Product>>(){});
+            prices = objectMapper.readValue(new File(args[1]), new TypeReference<List<BasePrice>>(){});
         } catch (IOException ioe) {
             logger.error("Trouble reading file >> " + ioe.getMessage());
             return;
