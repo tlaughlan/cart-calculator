@@ -26,7 +26,10 @@ public class Product {
     private int quantity;
 
     @JsonIgnore
-    private int basePrice;
+    private Integer basePrice;
+
+    @JsonIgnore
+    private Integer totalCost;
 
     public String getProductType() {
         return productType;
@@ -36,8 +39,28 @@ public class Product {
         return options;
     }
 
-    public void setBasePrice(int basePrice) {
+    public int getArtistMarkup() {
+        return artistMarkup;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public Integer getBasePrice() {
+        return basePrice;
+    }
+
+    public void setBasePrice(Integer basePrice) {
         this.basePrice = basePrice;
+    }
+
+    public Integer getTotalCost() {
+        return totalCost;
+    }
+
+    public void setTotalCost(Integer totalCost) {
+        this.totalCost = totalCost;
     }
 
     public void findBasePrice(List<BasePrice> basePriceGroup) {
@@ -59,12 +82,35 @@ public class Product {
                 }
                 if (optionMatchCounter == totalCommonOptions) {
                     this.setBasePrice(basePrice.getBasePrice());
-                    logger.info("Product of type " + this.getProductType() +
-                            " with options " + this.getOptions().toString() +
-                            " was assigned base price of " + basePrice.getBasePrice());
+                    logger.info(this.productDescription() +
+                            " was assigned BASE PRICE of " + basePrice.getBasePrice());
                     return;
                 }
             }
         }
+    }
+
+    /**
+     * The maths of this method is defined as: (base_price + round(base_price * artist_markup)) * quantity
+     * where artist_markup is a int representing a percentage.
+     */
+    public void calculateTotalCost() {
+        if (this.getBasePrice() != null) {
+            int basePriceInt = this.getBasePrice().intValue();
+            if (basePriceInt == 0) {
+                logger.warn(this.productDescription() +
+                        " has base price of 0 at time of total cost calculation. Is this intentional?");
+            }
+            this.setTotalCost((basePriceInt +
+                    Math.round(basePriceInt * (new Float(this.getArtistMarkup())/100))) * this.getQuantity());
+            logger.info(this.productDescription() + " was assigned TOTAL COST of " + this.getTotalCost());
+        } else {
+            logger.error(this.productDescription() +
+                    " is null at time of total cost calculation.");
+        }
+    }
+
+    public String productDescription() {
+        return "Product of type " + this.getProductType() + " with options " + this.getOptions().toString();
     }
 }

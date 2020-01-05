@@ -2,6 +2,7 @@ package com.applicant.redbubble.cart_calculator;
 
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
 import com.applicant.redbubble.cart_calculator.models.Product;
+import com.applicant.redbubble.cart_calculator.services.PriceCalculator;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.Logger;
@@ -37,8 +38,12 @@ public class App {
 
         Map<String, List<BasePrice>> groupedBasePrices =
                 prices.stream().collect(Collectors.groupingBy(BasePrice::getProductType));
+
         for (Product product : cart) {
             product.findBasePrice(groupedBasePrices.get(product.getProductType()));
+            product.calculateTotalCost();
         }
+
+        logger.info("Your total cart price is " + PriceCalculator.calculateTotalCartPrice(cart) + "\n");
     }
 }
