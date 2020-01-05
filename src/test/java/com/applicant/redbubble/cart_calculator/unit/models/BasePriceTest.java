@@ -8,17 +8,21 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.Arrays;
 
 public class BasePriceTest {
 
     private final String TEST_FILE_NAME = "test-base-prices.json";
+    private final String TEST_PRICE_PRODUCT_TYPE = "hoodie";
+    private final Map<String, List<String>> TEST_PRICE_OPTIONS = new HashMap<String, List<String>>() {{
+        put("colour", Arrays.asList("white", "dark"));
+        put("size", Arrays.asList("small", "medium"));
+    }};
+    private final int TEST_PRICE_BASE_PRICE = 3800;
 
-    /**
-     * This test can afford to be quite simple, since the BasePrice class is a basic POJO with no logic.
-     * We just need to ensure that the objects instantiate properly.
-     * @throws IOException
-     */
     @Test
     public void basePricesInstantiateCorrectlyFromJson() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
@@ -27,5 +31,10 @@ public class BasePriceTest {
         List<BasePrice> testPrices = objectMapper.readValue(testFile, new TypeReference<List<BasePrice>>(){});
 
         Assert.assertTrue(testPrices.size() == 3);
+
+        BasePrice spotcheckPrice = testPrices.get(0);
+        Assert.assertEquals(TEST_PRICE_PRODUCT_TYPE, spotcheckPrice.getProductType());
+        Assert.assertEquals(TEST_PRICE_OPTIONS, spotcheckPrice.getOptions());
+        Assert.assertEquals(TEST_PRICE_BASE_PRICE, spotcheckPrice.getBasePrice());
     }
 }
