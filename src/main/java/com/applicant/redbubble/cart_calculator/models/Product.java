@@ -36,10 +36,6 @@ public class Product {
         return options;
     }
 
-    public int getBasePrice() {
-        return basePrice;
-    }
-
     public void setBasePrice(int basePrice) {
         this.basePrice = basePrice;
     }
