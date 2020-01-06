@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class PriceCalculator {
 
@@ -44,5 +45,13 @@ public class PriceCalculator {
             }
         }
         return totalCartPrice;
+    }
+
+    public static Map<String, List<BasePrice>> groupPricesByProductType(List<BasePrice> basePrices) {
+        if (basePrices != null && basePrices.size() != 0) {
+            return basePrices.stream().collect(Collectors.groupingBy(BasePrice::getProductType));
+        } else {
+            return null;
+        }
     }
 }

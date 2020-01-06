@@ -36,8 +36,7 @@ public class App {
             return;
         }
 
-        Map<String, List<BasePrice>> groupedBasePrices =
-                prices.stream().collect(Collectors.groupingBy(BasePrice::getProductType));
+        Map<String, List<BasePrice>> groupedBasePrices = PriceCalculator.groupPricesByProductType(prices);
 
         for (Product product : cart) {
             product.findBasePrice(groupedBasePrices.get(product.getProductType()));
