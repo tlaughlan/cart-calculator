@@ -38,7 +38,7 @@ public class App {
         Map<String, List<BasePrice>> groupedBasePrices = PriceCalculator.groupPricesByProductType(prices);
 
         for (Product product : cart) {
-            product.findBasePrice(groupedBasePrices.get(product.getProductType()));
+            product.applyBasePrice(groupedBasePrices.get(product.getProductType()));
             product.calculateTotalCost();
         }
 

@@ -64,7 +64,7 @@ public class PriceCalculatorIT {
     public void calculateTotalCartPriceCorrectly() {
         Map<String, List<BasePrice>> groupedBasePrices = PriceCalculator.groupPricesByProductType(testPrices);
         for (Product product : testCart) {
-            product.findBasePrice(groupedBasePrices.get(product.getProductType()));
+            product.applyBasePrice(groupedBasePrices.get(product.getProductType()));
             product.calculateTotalCost();
         }
         Assert.assertEquals(TEST_CART_TOTAL_COST, PriceCalculator.calculateTotalCartPrice(testCart));

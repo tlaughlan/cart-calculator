@@ -63,7 +63,26 @@ public class Product {
         this.totalCost = totalCost;
     }
 
-    public void findBasePrice(List<BasePrice> basePriceGroup) {
+    /**
+     * This method is used to loop through all of the appropriate base prices for this product, find the one which
+     * satisfies all of the options and then apply that price's base price to this product. It determines the match
+     * based on the following predicate:
+     *
+     *     Price must contain a value match for each of the options which is has in common with Product.
+     *
+     * For example: The below price and product would be a match, since they have the common options b, c, d and
+     * each of the price options contains a match for the values of the product options.
+     *
+     * PRODUCT OPTIONS           PRICE OPTIONS
+     *       a                        x
+     *       b 1                      y
+     *       c 2                      b 1, 4
+     *       d 3                      c 2, 6
+     *                                d 7, 3
+     *
+     * @param basePriceGroup - The appropriate group of prices for this product's product type.
+     */
+    public void applyBasePrice(List<BasePrice> basePriceGroup) {
         for (BasePrice basePrice : basePriceGroup) {
             int optionMatchCounter = 0;
             int totalCommonOptions = PriceCalculator.countCommonOptions(this, basePrice);

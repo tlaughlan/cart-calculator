@@ -57,7 +57,7 @@ public class ProductTest {
         List<BasePrice> testPrices = objectMapper.readValue(testPriceFile, new TypeReference<List<BasePrice>>(){});
 
         Assert.assertNull(testHoodie.getBasePrice());
-        testHoodie.findBasePrice(testPrices);
+        testHoodie.applyBasePrice(testPrices);
         Assert.assertEquals(TEST_HOODIE_BASE_PRICE, testHoodie.getBasePrice().intValue());
     }
 
