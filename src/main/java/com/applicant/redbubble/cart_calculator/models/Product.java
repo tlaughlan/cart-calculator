@@ -105,7 +105,7 @@ public class Product {
                     Math.round(basePriceInt * (new Float(this.getArtistMarkup())/100))) * this.getQuantity());
             logger.info(this.productDescription() + " was assigned TOTAL COST of " + this.getTotalCost());
         } else {
-            logger.error(this.productDescription() +
+            logger.error("Base price of " + this.productDescription() +
                     " is null at time of total cost calculation.");
         }
     }
