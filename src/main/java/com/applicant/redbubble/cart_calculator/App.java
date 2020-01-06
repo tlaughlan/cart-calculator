@@ -43,5 +43,6 @@ public class App {
         }
 
         logger.info("Your total cart price is " + PriceCalculator.calculateTotalCartPrice(cart) + "\n");
+        System.out.println(PriceCalculator.calculateTotalCartPrice(cart));
     }
 }

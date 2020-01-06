@@ -5,16 +5,12 @@
         <property name="linePattern">%d [%t] %-5level %logger{36} - %msg%n%throwable</property>
     </Properties>
     <Appenders>
-        <Console name="console" target="SYSTEM_OUT">
-            <PatternLayout pattern="${linePattern}"/>
-        </Console>
         <File name="logFile" fileName="${logFileNamePattern}">
             <PatternLayout pattern="${linePattern}"/>
         </File>
     </Appenders>
     <Loggers>
         <Root level="ALL">
-            <AppenderRef ref="console"/>
             <AppenderRef ref="logFile"/>
         </Root>
     </Loggers>
