@@ -29,7 +29,7 @@ public class BasePriceTest {
         File testFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_PRICES).getFile());
         List<BasePrice> testPrices = objectMapper.readValue(testFile, new TypeReference<List<BasePrice>>(){});
 
-        Assert.assertTrue(testPrices.size() == 3);
+        Assert.assertTrue(testPrices.size() == 10);
 
         BasePrice spotcheckPrice = testPrices.get(0);
         Assert.assertEquals(Constants.PRODUCT_TYPE_HOODIE, spotcheckPrice.getProductType());
