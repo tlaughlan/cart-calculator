@@ -52,7 +52,7 @@ suffix.
 
 ### Execution
 
-Finally, executing the application is simple as :pie:! Just go to the `target` folder and run the jar file, passing in 
+Finally, executing the application is a piece of :cake:! Just go to the `target` folder and run the jar file, passing in 
 your cart and base price file as parameters (in that order). For example:  
 
 `java -jar cart-calculator-1.0-SNAPSHOT-jar-with-dependencies.jar ./cart-4560.json .base-prices.json`
