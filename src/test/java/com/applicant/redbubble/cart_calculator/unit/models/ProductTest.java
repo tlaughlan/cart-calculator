@@ -1,9 +1,12 @@
 package com.applicant.redbubble.cart_calculator.unit.models;
 
+import com.applicant.redbubble.cart_calculator.Constants;
+import com.applicant.redbubble.cart_calculator.models.BasePrice;
 import com.applicant.redbubble.cart_calculator.models.Product;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
@@ -14,29 +17,63 @@ import java.util.Map;
 
 public class ProductTest {
 
-    private final String TEST_FILE_NAME = "test-cart.json";
-    private final String TEST_HOODIE_PRODUCT_TYPE = "hoodie";
+    private final ObjectMapper objectMapper = new ObjectMapper();
+    private final ClassLoader classLoader = getClass().getClassLoader();
+    private List<Product> testCart;
+    private Product testHoodie;
+
     private final Map<String, String> TEST_HOODIE_OPTIONS = new HashMap<String, String>() {{
-        put("size", "small");
+        put("size", "large");
         put("colour", "dark");
         put("print-location", "front");
     }};
     private final int TEST_HOODIE_ARTIST_MARKUP = 20;
     private final int TEST_HODDIE_QUANTITY = 2;
+    private final int TEST_HOODIE_BASE_PRICE = 4212;
+    private final int TEST_HOODIE_TOTAL_COST = 10108;
+
+    @Before
+    public void setup() throws IOException {
+        File testFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_CART).getFile());
+        testCart = objectMapper.readValue(testFile, new TypeReference<List<Product>>(){});
+        testHoodie = testCart.get(0);
+    }
 
     @Test
-    public void cartInstantiatesCorrectlyFromJson() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ClassLoader classLoader = getClass().getClassLoader();
-        File testFile = new File(classLoader.getResource(TEST_FILE_NAME).getFile());
-        List<Product> testCart = objectMapper.readValue(testFile, new TypeReference<List<Product>>(){});
-
+    public void cartInstantiatesCorrectlyFromJson() {
         Assert.assertTrue(testCart.size() == 2);
 
-        Product spotcheckHoodie = testCart.get(0);
-        Assert.assertEquals(TEST_HOODIE_PRODUCT_TYPE, spotcheckHoodie.getProductType());
-        Assert.assertEquals(TEST_HOODIE_OPTIONS, spotcheckHoodie.getOptions());
-        Assert.assertEquals(TEST_HOODIE_ARTIST_MARKUP, spotcheckHoodie.getArtistMarkup());
-        Assert.assertEquals(TEST_HODDIE_QUANTITY, spotcheckHoodie.getQuantity());
+        Assert.assertEquals(Constants.PRODUCT_TYPE_HOODIE, testHoodie.getProductType());
+        Assert.assertEquals(TEST_HOODIE_OPTIONS, testHoodie.getOptions());
+        Assert.assertEquals(TEST_HOODIE_ARTIST_MARKUP, testHoodie.getArtistMarkup());
+        Assert.assertEquals(TEST_HODDIE_QUANTITY, testHoodie.getQuantity());
+        Assert.assertNull(testHoodie.getBasePrice());
+        Assert.assertNull(testHoodie.getTotalCost());
+    }
+
+    @Test
+    public void findsBasePriceCorrectly() throws IOException {
+        File testPriceFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_PRICES).getFile());
+        List<BasePrice> testPrices = objectMapper.readValue(testPriceFile, new TypeReference<List<BasePrice>>(){});
+
+        Assert.assertNull(testHoodie.getBasePrice());
+        testHoodie.findBasePrice(testPrices);
+        Assert.assertEquals(TEST_HOODIE_BASE_PRICE, testHoodie.getBasePrice().intValue());
+    }
+
+    @Test
+    public void calculateTotalCostCorrectly() {
+        testHoodie.setBasePrice(TEST_HOODIE_BASE_PRICE);
+        Assert.assertNull(testHoodie.getTotalCost());
+        testHoodie.calculateTotalCost();
+        Assert.assertEquals(TEST_HOODIE_TOTAL_COST, testHoodie.getTotalCost().intValue());
+    }
+
+    @Test
+    public void calculateTotalCostRemainsNullOnNullBasePrice() {
+        Assert.assertNull(testHoodie.getBasePrice());
+        Assert.assertNull(testHoodie.getTotalCost());
+        testHoodie.calculateTotalCost();
+        Assert.assertNull(testHoodie.getTotalCost());
     }
 }
