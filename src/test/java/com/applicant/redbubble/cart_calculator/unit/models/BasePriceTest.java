@@ -1,5 +1,6 @@
 package com.applicant.redbubble.cart_calculator.unit.models;
 
+import com.applicant.redbubble.cart_calculator.Constants;
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -15,8 +16,6 @@ import java.util.Arrays;
 
 public class BasePriceTest {
 
-    private final String TEST_FILE_NAME = "test-base-prices.json";
-    private final String TEST_PRICE_PRODUCT_TYPE = "hoodie";
     private final Map<String, List<String>> TEST_PRICE_OPTIONS = new HashMap<String, List<String>>() {{
         put("colour", Arrays.asList("white", "dark"));
         put("size", Arrays.asList("small", "medium"));
@@ -27,13 +26,13 @@ public class BasePriceTest {
     public void basePricesInstantiateCorrectlyFromJson() throws IOException {
         ObjectMapper objectMapper = new ObjectMapper();
         ClassLoader classLoader = getClass().getClassLoader();
-        File testFile = new File(classLoader.getResource(TEST_FILE_NAME).getFile());
+        File testFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_PRICES).getFile());
         List<BasePrice> testPrices = objectMapper.readValue(testFile, new TypeReference<List<BasePrice>>(){});
 
         Assert.assertTrue(testPrices.size() == 3);
 
         BasePrice spotcheckPrice = testPrices.get(0);
-        Assert.assertEquals(TEST_PRICE_PRODUCT_TYPE, spotcheckPrice.getProductType());
+        Assert.assertEquals(Constants.PRODUCT_TYPE_HOODIE, spotcheckPrice.getProductType());
         Assert.assertEquals(TEST_PRICE_OPTIONS, spotcheckPrice.getOptions());
         Assert.assertEquals(TEST_PRICE_BASE_PRICE, spotcheckPrice.getBasePrice());
     }
