@@ -39,7 +39,14 @@ public class App {
 
         for (Product product : cart) {
             product.applyBasePrice(groupedBasePrices.get(product.getProductType()));
-            product.calculateTotalCost();
+            if (product.getBasePrice() != null) {
+                Integer totalCost = Product.calculateTotalCost(product.getBasePrice(), product.getArtistMarkup(),
+                        product.getQuantity());
+                product.setTotalCost(totalCost);
+            } else {
+                logger.error(product.productDescription()
+                        + " has base price of null at time of total cost calculation.");
+            }
         }
 
         logger.info("Your total cart price is " + PriceCalculator.calculateTotalCartPrice(cart) + "\n");

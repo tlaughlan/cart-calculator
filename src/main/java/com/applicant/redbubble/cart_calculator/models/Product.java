@@ -113,20 +113,8 @@ public class Product {
      * The maths of this method is defined as: (base_price + round(base_price * artist_markup)) * quantity
      * where artist_markup is a int representing a percentage.
      */
-    public void calculateTotalCost() {
-        if (this.getBasePrice() != null) {
-            int basePriceInt = this.getBasePrice().intValue();
-            if (basePriceInt == 0) {
-                logger.warn(this.productDescription() +
-                        " has base price of 0 at time of total cost calculation. Is this intentional?");
-            }
-            this.setTotalCost((basePriceInt +
-                    Math.round(basePriceInt * (new Float(this.getArtistMarkup())/100))) * this.getQuantity());
-            logger.info(this.productDescription() + " was assigned TOTAL COST of " + this.getTotalCost());
-        } else {
-            logger.error("Base price of " + this.productDescription() +
-                    " is null at time of total cost calculation.");
-        }
+    public static Integer calculateTotalCost(int basePrice, int artistMarkup, int quantity) {
+        return (basePrice + Math.round(basePrice * (new Float(artistMarkup)/100))) * quantity;
     }
 
     public String productDescription() {

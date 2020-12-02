@@ -64,16 +64,8 @@ public class ProductTest {
     @Test
     public void calculateTotalCostCorrectly() {
         testHoodie.setBasePrice(TEST_HOODIE_BASE_PRICE);
-        Assert.assertNull(testHoodie.getTotalCost());
-        testHoodie.calculateTotalCost();
-        Assert.assertEquals(TEST_HOODIE_TOTAL_COST, testHoodie.getTotalCost().intValue());
-    }
-
-    @Test
-    public void calculateTotalCostRemainsNullOnNullBasePrice() {
-        Assert.assertNull(testHoodie.getBasePrice());
-        Assert.assertNull(testHoodie.getTotalCost());
-        testHoodie.calculateTotalCost();
-        Assert.assertNull(testHoodie.getTotalCost());
+        int exampleTotalCost = Product.calculateTotalCost(testHoodie.getBasePrice(), testHoodie.getArtistMarkup(),
+                testHoodie.getQuantity());
+        Assert.assertEquals(TEST_HOODIE_TOTAL_COST, exampleTotalCost);
     }
 }
