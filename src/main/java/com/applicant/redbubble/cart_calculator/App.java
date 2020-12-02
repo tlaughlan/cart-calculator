@@ -25,7 +25,7 @@ public class App {
         Cart cart = new Cart(FileConsumer.readCartFile(new File(args[0])));
         List<BasePrice> prices = FileConsumer.readBasePriceFile(new File (args[1]));
 
-        Map<String, List<BasePrice>> groupedBasePrices = PriceCalculator.groupPricesByProductType(prices);
+        Map<String, List<BasePrice>> groupedBasePrices = BasePrice.groupPricesByProductType(prices);
 
         for (Product product : cart.getProductList()) {
             product.applyBasePrice(groupedBasePrices.get(product.getProductType()));

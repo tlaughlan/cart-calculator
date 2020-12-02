@@ -2,38 +2,48 @@ package com.applicant.redbubble.cart_calculator.unit.models;
 
 import com.applicant.redbubble.cart_calculator.Constants;
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.applicant.redbubble.cart_calculator.services.FileConsumer;
 import org.junit.Assert;
+import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Arrays;
 
 public class BasePriceTest {
 
-    private final Map<String, List<String>> TEST_PRICE_OPTIONS = new HashMap<String, List<String>>() {{
-        put("colour", Arrays.asList("white", "dark"));
-        put("size", Arrays.asList("small", "medium"));
-    }};
-    private final int TEST_PRICE_BASE_PRICE = 3800;
+    private final ClassLoader classLoader = getClass().getClassLoader();
+
+    private List<BasePrice> testPrices;
+    private File testBasePriceFile;
+
+    @Before
+    public void setup() throws IOException {
+        testBasePriceFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_PRICES).getFile());
+        testPrices = FileConsumer.readBasePriceFile(testBasePriceFile);
+    }
 
     @Test
-    public void basePricesInstantiateCorrectlyFromJson() throws IOException {
-        ObjectMapper objectMapper = new ObjectMapper();
-        ClassLoader classLoader = getClass().getClassLoader();
-        File testFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_PRICES).getFile());
-        List<BasePrice> testPrices = objectMapper.readValue(testFile, new TypeReference<List<BasePrice>>(){});
+    public void groupPricesByProductTypeCorrectly() {
+        Map<String, List<BasePrice>> groupedBasePrices = BasePrice.groupPricesByProductType(testPrices);
+        Assert.assertEquals(3, groupedBasePrices.size());
+        Assert.assertTrue(groupedBasePrices.containsKey(Constants.PRODUCT_TYPE_HOODIE));
+        Assert.assertTrue(groupedBasePrices.containsKey(Constants.PRODUCT_TYPE_STICKER));
+        Assert.assertTrue(groupedBasePrices.containsKey(Constants.PRODUCT_TYPE_LEGGINGS));
+    }
 
-        Assert.assertTrue(testPrices.size() == 10);
+    @Test
+    public void returnNullWhenGroupingOnNullBasePriceList() {
+        testPrices = null;
+        Assert.assertNull(BasePrice.groupPricesByProductType(testPrices));
+    }
 
-        BasePrice spotcheckPrice = testPrices.get(0);
-        Assert.assertEquals(Constants.PRODUCT_TYPE_HOODIE, spotcheckPrice.getProductType());
-        Assert.assertEquals(TEST_PRICE_OPTIONS, spotcheckPrice.getOptions());
-        Assert.assertEquals(TEST_PRICE_BASE_PRICE, spotcheckPrice.getBasePrice());
+    @Test
+    public void returnNullWhenGroupingOnEmptyBasePriceList() {
+        testPrices.removeAll(testPrices);
+        Assert.assertEquals(0, testPrices.size());
+        Assert.assertNull(BasePrice.groupPricesByProductType(testPrices));
     }
 }

@@ -33,12 +33,4 @@ public class PriceCalculator {
         commonOptionsCount = productOptions.size();
         return commonOptionsCount;
     }
-
-    public static Map<String, List<BasePrice>> groupPricesByProductType(List<BasePrice> basePrices) {
-        if (basePrices != null && basePrices.size() != 0) {
-            return basePrices.stream().collect(Collectors.groupingBy(BasePrice::getProductType));
-        } else {
-            return null;
-        }
-    }
 }

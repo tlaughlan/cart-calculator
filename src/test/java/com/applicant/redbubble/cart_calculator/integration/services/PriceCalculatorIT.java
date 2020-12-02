@@ -15,7 +15,6 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Map;
 
 public class PriceCalculatorIT {
 
@@ -60,27 +59,5 @@ public class PriceCalculatorIT {
         int actual = PriceCalculator.countCommonOptions(testProduct, testPrice);
         Assert.assertEquals(3, testProduct.getOptions().size());
         Assert.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void groupPricesByProductTypeCorrectly() {
-        Map<String, List<BasePrice>> groupedBasePrices = PriceCalculator.groupPricesByProductType(testPrices);
-        Assert.assertEquals(3, groupedBasePrices.size());
-        Assert.assertTrue(groupedBasePrices.containsKey(Constants.PRODUCT_TYPE_HOODIE));
-        Assert.assertTrue(groupedBasePrices.containsKey(Constants.PRODUCT_TYPE_STICKER));
-        Assert.assertTrue(groupedBasePrices.containsKey(Constants.PRODUCT_TYPE_LEGGINGS));
-    }
-
-    @Test
-    public void returnNullWhenGroupingOnNullBasePriceList() {
-        testPrices = null;
-        Assert.assertNull(PriceCalculator.groupPricesByProductType(testPrices));
-    }
-
-    @Test
-    public void returnNullWhenGroupingOnEmptyBasePriceList() {
-        testPrices.removeAll(testPrices);
-        Assert.assertEquals(0, testPrices.size());
-        Assert.assertNull(PriceCalculator.groupPricesByProductType(testPrices));
     }
 }
