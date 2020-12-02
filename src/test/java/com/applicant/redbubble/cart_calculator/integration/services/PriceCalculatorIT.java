@@ -2,6 +2,7 @@ package com.applicant.redbubble.cart_calculator.integration.services;
 
 import com.applicant.redbubble.cart_calculator.Constants;
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
+import com.applicant.redbubble.cart_calculator.models.Cart;
 import com.applicant.redbubble.cart_calculator.models.Product;
 import com.applicant.redbubble.cart_calculator.services.PriceCalculator;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -20,8 +21,7 @@ public class PriceCalculatorIT {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
     private final ClassLoader classLoader = getClass().getClassLoader();
-    private final int TEST_CART_TOTAL_COST = 10351;
-    private List<Product> testCart;
+    private Cart testCart;
     private List<BasePrice> testPrices;
     private Product testProduct;
     private BasePrice testPrice;
@@ -29,7 +29,9 @@ public class PriceCalculatorIT {
     @Before
     public void setup() throws IOException {
         File testCartFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_CART).getFile());
-        testCart = objectMapper.readValue(testCartFile, new TypeReference<List<Product>>(){});
+        List<Product> testProducts = objectMapper.readValue(testCartFile, new TypeReference<List<Product>>(){});
+        testCart = new Cart(testProducts);
+
         File testPricesFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_PRICES).getFile());
         testPrices = objectMapper.readValue(testPricesFile, new TypeReference<List<BasePrice>>(){});
     }
@@ -58,18 +60,6 @@ public class PriceCalculatorIT {
         int actual = PriceCalculator.countCommonOptions(testProduct, testPrice);
         Assert.assertEquals(3, testProduct.getOptions().size());
         Assert.assertEquals(expected, actual);
-    }
-
-    @Test
-    public void calculateTotalCartPriceCorrectly() {
-        Map<String, List<BasePrice>> groupedBasePrices = PriceCalculator.groupPricesByProductType(testPrices);
-        for (Product product : testCart) {
-            product.applyBasePrice(groupedBasePrices.get(product.getProductType()));
-            int totalCost = Product.calculateTotalCost(product.getBasePrice(), product.getArtistMarkup(),
-                    product.getQuantity());
-            product.setTotalCost(totalCost);
-        }
-        Assert.assertEquals(TEST_CART_TOTAL_COST, PriceCalculator.calculateTotalCartPrice(testCart));
     }
 
     @Test

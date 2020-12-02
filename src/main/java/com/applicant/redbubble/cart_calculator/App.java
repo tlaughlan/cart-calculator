@@ -1,6 +1,7 @@
 package com.applicant.redbubble.cart_calculator;
 
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
+import com.applicant.redbubble.cart_calculator.models.Cart;
 import com.applicant.redbubble.cart_calculator.models.Product;
 import com.applicant.redbubble.cart_calculator.services.FileConsumer;
 import com.applicant.redbubble.cart_calculator.services.PriceCalculator;
@@ -21,12 +22,12 @@ public class App {
             return;
         }
 
-        List<Product> cart = FileConsumer.readCartFile(new File(args[0]));
+        Cart cart = new Cart(FileConsumer.readCartFile(new File(args[0])));
         List<BasePrice> prices = FileConsumer.readBasePriceFile(new File (args[1]));
 
         Map<String, List<BasePrice>> groupedBasePrices = PriceCalculator.groupPricesByProductType(prices);
 
-        for (Product product : cart) {
+        for (Product product : cart.getProductList()) {
             product.applyBasePrice(groupedBasePrices.get(product.getProductType()));
             if (product.getBasePrice() != null) {
                 Integer totalCost = Product.calculateTotalCost(product.getBasePrice(), product.getArtistMarkup(),
@@ -38,7 +39,9 @@ public class App {
             }
         }
 
-        logger.info("Your total cart price is " + PriceCalculator.calculateTotalCartPrice(cart) + "\n");
-        System.out.println(PriceCalculator.calculateTotalCartPrice(cart));
+        cart.setTotalPrice(Cart.calculateTotalCartPrice(cart));
+
+        logger.info("Your total cart price is " + cart.getTotalPrice() + "\n");
+        System.out.println(cart.getTotalPrice());
     }
 }

@@ -34,19 +34,6 @@ public class PriceCalculator {
         return commonOptionsCount;
     }
 
-    public static int calculateTotalCartPrice(List<Product> cart) {
-        int totalCartPrice = 0;
-        for (Product product : cart) {
-            if (product.getTotalCost() != null) {
-                totalCartPrice += product.getTotalCost();
-            } else {
-                logger.error(product.productDescription() +
-                        " has total cost null at time of calculating total cart price.");
-            }
-        }
-        return totalCartPrice;
-    }
-
     public static Map<String, List<BasePrice>> groupPricesByProductType(List<BasePrice> basePrices) {
         if (basePrices != null && basePrices.size() != 0) {
             return basePrices.stream().collect(Collectors.groupingBy(BasePrice::getProductType));
