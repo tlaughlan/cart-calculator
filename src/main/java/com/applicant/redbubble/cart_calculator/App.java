@@ -2,14 +2,12 @@ package com.applicant.redbubble.cart_calculator;
 
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
 import com.applicant.redbubble.cart_calculator.models.Product;
+import com.applicant.redbubble.cart_calculator.services.FileConsumer;
 import com.applicant.redbubble.cart_calculator.services.PriceCalculator;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
@@ -23,17 +21,8 @@ public class App {
             return;
         }
 
-        List<Product> cart;
-        List<BasePrice> prices;
-
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            cart = objectMapper.readValue(new File(args[0]), new TypeReference<List<Product>>(){});
-            prices = objectMapper.readValue(new File(args[1]), new TypeReference<List<BasePrice>>(){});
-        } catch (IOException ioe) {
-            logger.error("Trouble reading file >> " + ioe.getMessage());
-            return;
-        }
+        List<Product> cart = FileConsumer.readCartFile(new File(args[0]));
+        List<BasePrice> prices = FileConsumer.readBasePriceFile(new File (args[1]));
 
         Map<String, List<BasePrice>> groupedBasePrices = PriceCalculator.groupPricesByProductType(prices);
 
