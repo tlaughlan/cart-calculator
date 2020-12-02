@@ -9,6 +9,7 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,10 +20,19 @@ public class BasePriceTest {
     private List<BasePrice> testPrices;
     private File testBasePriceFile;
 
+    private Map<String, String> dummyProductOptionsTrue = new HashMap<>();
+    private Map<String, String> dummyProductOptionsFalse = new HashMap<>();
+
     @Before
     public void setup() throws IOException {
         testBasePriceFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_PRICES).getFile());
         testPrices = FileConsumer.readBasePriceFile(testBasePriceFile);
+
+        dummyProductOptionsTrue.put("size", "small");
+        dummyProductOptionsTrue.put("colour", "dark");
+
+        dummyProductOptionsFalse.put("colour", "dark");
+        dummyProductOptionsFalse.put("size", "large");
     }
 
     @Test
@@ -45,5 +55,15 @@ public class BasePriceTest {
         testPrices.removeAll(testPrices);
         Assert.assertEquals(0, testPrices.size());
         Assert.assertNull(BasePrice.groupPricesByProductType(testPrices));
+    }
+
+    @Test
+    public void testContainsOptionsTrue() {
+        Assert.assertTrue(testPrices.get(0).containsOptions(dummyProductOptionsTrue));
+    }
+
+    @Test
+    public void testContainsOptionsFalse() {
+        Assert.assertFalse(testPrices.get(0).containsOptions(dummyProductOptionsFalse));
     }
 }

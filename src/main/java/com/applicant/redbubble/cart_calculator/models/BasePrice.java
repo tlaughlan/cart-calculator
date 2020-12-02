@@ -35,4 +35,20 @@ public class BasePrice {
             return null;
         }
     }
+
+    /**
+     * This method will loop through all of the options lists for this base price. If each options list contains a match
+     * with the product options then true is returned. The method fails early as soon as an option finds no matches.
+     * @param productOptions
+     * @return
+     */
+    public boolean containsOptions(Map<String, String> productOptions) {
+        for (Map.Entry<String, List<String>> bpOption : this.getOptions().entrySet()) {
+            String productOption = productOptions.get(bpOption.getKey());
+            if (!bpOption.getValue().contains(productOption)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
