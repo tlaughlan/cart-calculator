@@ -2,7 +2,7 @@ package com.applicant.redbubble.cart_calculator.unit.models;
 
 import com.applicant.redbubble.cart_calculator.Constants;
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
-import com.applicant.redbubble.cart_calculator.models.Product;
+import com.applicant.redbubble.cart_calculator.models.CartItem;
 import com.applicant.redbubble.cart_calculator.services.FileConsumer;
 import org.junit.Assert;
 import org.junit.Before;
@@ -27,14 +27,14 @@ public class FileConsumerTest {
 
     @Test
     public void readCartFileSuccessfully() {
-        List<Product> testProducts = FileConsumer.readCartFile(testCartFile);
-        Assert.assertEquals(2, testProducts.size());
+        List<CartItem> testCartItems = FileConsumer.readCartFile(testCartFile);
+        Assert.assertEquals(2, testCartItems.size());
     }
 
     @Test
     public void returnNullWhenCartFileReadFails() {
-        List<Product> testProducts = FileConsumer.readCartFile(new File("my_imaginary_file.txt"));
-        Assert.assertNull(testProducts);
+        List<CartItem> testCartItems = FileConsumer.readCartFile(new File("my_imaginary_file.txt"));
+        Assert.assertNull(testCartItems);
     }
 
     @Test

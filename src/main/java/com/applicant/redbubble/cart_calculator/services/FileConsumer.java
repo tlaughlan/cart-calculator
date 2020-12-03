@@ -1,7 +1,7 @@
 package com.applicant.redbubble.cart_calculator.services;
 
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
-import com.applicant.redbubble.cart_calculator.models.Product;
+import com.applicant.redbubble.cart_calculator.models.CartItem;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.logging.log4j.LogManager;
@@ -15,15 +15,15 @@ public class FileConsumer {
 
     static final Logger logger = LogManager.getLogger(FileConsumer.class.getName());
 
-    public static List<Product> readCartFile(File cartFile) {
-        List<Product> productList = null;
+    public static List<CartItem> readCartFile(File cartFile) {
+        List<CartItem> cartItems = null;
         try {
             ObjectMapper objectMapper = new ObjectMapper();
-            productList = objectMapper.readValue(cartFile, new TypeReference<List<Product>>(){});
+            cartItems = objectMapper.readValue(cartFile, new TypeReference<List<CartItem>>(){});
         } catch (IOException ioe) {
             logger.error("Trouble reading file >> " + ioe.getMessage());
         }
-        return productList;
+        return cartItems;
     }
 
     public static List<BasePrice> readBasePriceFile(File basePriceFile) {

@@ -21,7 +21,14 @@ public class PricedCartItem extends CartItem{
         return totalPrice;
     }
 
-    public PricedCartItem(List<BasePrice> basePriceGroup) {
+    public PricedCartItem(CartItem cartItem, List<BasePrice> basePriceGroup) {
+        super(
+            cartItem.getProductType(),
+            cartItem.getOptions(),
+            cartItem.getArtistMarkup(),
+            cartItem.getQuantity()
+        );
+
         this.basePrice = findBasePrice(basePriceGroup);
         logger.info(description() + " has been assigned BASE PRICE of " + getBasePrice());
 
