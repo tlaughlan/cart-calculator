@@ -21,14 +21,8 @@ public class App {
             return;
         }
 
-//        Cart cart = new Cart(FileConsumer.readCartFile(new File(args[0])));
-        List<BasePrice> prices = FileConsumer.readBasePriceFile(new File (args[1]));
-//
-//        cart.populateProductBasePrices(prices);
-//        cart.populateProductTotalCosts();
-//        cart.setTotalPrice(cart.calculateTotalCartPrice());
-
         List<CartItem> cartItems = FileConsumer.readCartFile(new File(args[0]));
+        List<BasePrice> prices = FileConsumer.readBasePriceFile(new File (args[1]));
 
         List<PricedCartItem> pricedCartItems = new ArrayList<>();
         for (CartItem currentCartItem : cartItems) {
@@ -36,7 +30,6 @@ public class App {
         }
 
         Integer totalCartCost = 0;
-
         for (PricedCartItem currentPricedCartItem : pricedCartItems) {
             totalCartCost += currentPricedCartItem.getTotalPrice();
         }
