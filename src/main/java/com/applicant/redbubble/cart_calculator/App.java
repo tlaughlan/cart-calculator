@@ -2,6 +2,7 @@ package com.applicant.redbubble.cart_calculator;
 
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
 import com.applicant.redbubble.cart_calculator.models.CartItem;
+import com.applicant.redbubble.cart_calculator.models.OrderSummary;
 import com.applicant.redbubble.cart_calculator.models.PricedCartItem;
 import com.applicant.redbubble.cart_calculator.services.FileConsumer;
 import org.apache.logging.log4j.Logger;
@@ -25,21 +26,13 @@ public class App {
 
         List<CartItem> cartItems = FileConsumer.readCartFile(new File(args[0]));
         List<BasePrice> prices = FileConsumer.readBasePriceFile(new File (args[1]));
+
         Map<String, List<BasePrice>> groupedPrices = groupPricesByProductType(prices);
 
-        List<PricedCartItem> pricedCartItems = new ArrayList<>();
-        for (CartItem currentCartItem : cartItems) {
-            List<BasePrice> pricingGroup = groupedPrices.get(currentCartItem.getProductType());
-            pricedCartItems.add(new PricedCartItem(currentCartItem, pricingGroup));
-        }
+        OrderSummary orderSummary = new OrderSummary(cartItems, groupedPrices);
 
-        Integer totalCartCost = 0;
-        for (PricedCartItem currentPricedCartItem : pricedCartItems) {
-            totalCartCost += currentPricedCartItem.getTotalPrice();
-        }
-
-        logger.info("Your total cart price is " + totalCartCost + "\n");
-        System.out.println(totalCartCost);
+        logger.info("Your total cart price is " + orderSummary.getOrderTotal() + "\n");
+        System.out.println(orderSummary.getOrderTotal());
     }
 
     public static Map<String, List<BasePrice>> groupPricesByProductType(List<BasePrice> basePrices) {
