@@ -1,15 +1,13 @@
-package com.applicant.redbubble.cart_calculator.unit.models;
+package com.applicant.redbubble.cart_calculator.services;
 
 import com.applicant.redbubble.cart_calculator.Constants;
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
 import com.applicant.redbubble.cart_calculator.models.CartItem;
-import com.applicant.redbubble.cart_calculator.services.FileConsumer;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 
 public class FileConsumerTest {
@@ -20,7 +18,7 @@ public class FileConsumerTest {
     private File testBasePriceFile;
 
     @Before
-    public void setup() throws IOException {
+    public void setup() {
         testCartFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_CART).getFile());
         testBasePriceFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_PRICES).getFile());
     }

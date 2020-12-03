@@ -1,4 +1,4 @@
-package com.applicant.redbubble.cart_calculator.unit.models;
+package com.applicant.redbubble.cart_calculator.models;
 
 import com.applicant.redbubble.cart_calculator.Constants;
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
