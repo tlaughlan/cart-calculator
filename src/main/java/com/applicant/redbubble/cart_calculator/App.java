@@ -1,17 +1,16 @@
 package com.applicant.redbubble.cart_calculator;
 
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
-import com.applicant.redbubble.cart_calculator.models.Product;
-import com.applicant.redbubble.cart_calculator.services.PriceCalculator;
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.applicant.redbubble.cart_calculator.models.CartItem;
+import com.applicant.redbubble.cart_calculator.models.OrderSummary;
+import com.applicant.redbubble.cart_calculator.services.FileConsumer;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
-import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class App {
 
@@ -23,26 +22,29 @@ public class App {
             return;
         }
 
-        List<Product> cart;
-        List<BasePrice> prices;
+        List<CartItem> cartItems = FileConsumer.readCartFile(new File(args[0]));
+        List<BasePrice> prices = FileConsumer.readBasePriceFile(new File (args[1]));
 
-        try {
-            ObjectMapper objectMapper = new ObjectMapper();
-            cart = objectMapper.readValue(new File(args[0]), new TypeReference<List<Product>>(){});
-            prices = objectMapper.readValue(new File(args[1]), new TypeReference<List<BasePrice>>(){});
-        } catch (IOException ioe) {
-            logger.error("Trouble reading file >> " + ioe.getMessage());
-            return;
+        Map<String, List<BasePrice>> groupedPrices = groupPricesByProductType(prices);
+
+        OrderSummary orderSummary = new OrderSummary(cartItems, groupedPrices);
+
+        logger.info("Your total cart price is " + orderSummary.getOrderTotal() + "\n");
+        System.out.println(orderSummary.getOrderTotal());
+    }
+
+    /**
+     * Group the base price list into sub lists based on product type. This allows for reduction of time complexity when
+     * searching for a match later.
+     * @param basePrices
+     * @return
+     */
+    public static Map<String, List<BasePrice>> groupPricesByProductType(List<BasePrice> basePrices) {
+        if (basePrices != null && basePrices.size() != 0) {
+            return basePrices.stream().collect(Collectors.groupingBy(BasePrice::getProductType));
+        } else {
+            logger.error("Problem occurred while grouping base prices.");
+            return null;
         }
-
-        Map<String, List<BasePrice>> groupedBasePrices = PriceCalculator.groupPricesByProductType(prices);
-
-        for (Product product : cart) {
-            product.applyBasePrice(groupedBasePrices.get(product.getProductType()));
-            product.calculateTotalCost();
-        }
-
-        logger.info("Your total cart price is " + PriceCalculator.calculateTotalCartPrice(cart) + "\n");
-        System.out.println(PriceCalculator.calculateTotalCartPrice(cart));
     }
 }

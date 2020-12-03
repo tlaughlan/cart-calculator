@@ -43,12 +43,8 @@ directory. The target directory should hold a jar file called `cart-calculator-1
 
 ### Running the tests
 
-The unit and integration tests run as part of the Maven build lifecycle. This means that building the app will have 
-already triggered the them to run. However, if you'd like to run them specifically you can do so like this:
-
-- `mvn test` will cause the Unit tests to run. This includes any classes with the "Test" suffix.
-- `mvn verify` uses the Maven Failsafe Plugin to run the integration tests. This includes any classes with the "IT" 
-suffix.
+All of the models and services in this repo are fully unit tested. These tests are executed as part of the Maven build 
+lifecycle. If you would like to only run the tests instead of packaging the whole project, then use `mvn test`.
 
 ### Execution
 
@@ -60,3 +56,14 @@ your cart and base price file as parameters (in that order). For example:
 Upon executing, the application will create a comprehensive log file in the generated `target/log` directory. This log 
 outputs a useful commentary as the products as paired with their appropriate prices and their total costs are 
 calculated. Any warnings or errors will also be sent to this log file.
+
+### Time complexity
+
+In Big O notation, the time complexity of this application would be described as ***O(n\*m)*** where ***n*** is the size 
+of the cart file and ***m*** is the size of the base prices file.
+
+The application implements the following strategies in order to reduce time complexity:
+
+- Grouping base prices by product type. This greatly reduces the prices traversed per product.
+- Exiting fast during the options comparison, `containsOptions`. There is no point comparing all of a base price's
+options lists if one of them has already failed to satisfy the product's corresponding option.
