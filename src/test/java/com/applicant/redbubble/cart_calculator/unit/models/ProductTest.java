@@ -56,16 +56,13 @@ public class ProductTest {
         File testPriceFile = new File(classLoader.getResource(Constants.FILE_NAME_TEST_PRICES).getFile());
         List<BasePrice> testPrices = objectMapper.readValue(testPriceFile, new TypeReference<List<BasePrice>>(){});
 
-        Assert.assertNull(testHoodie.getBasePrice());
-        testHoodie.applyBasePrice(testPrices);
-        Assert.assertEquals(TEST_HOODIE_BASE_PRICE, testHoodie.getBasePrice().intValue());
+        Assert.assertEquals(TEST_HOODIE_BASE_PRICE, testHoodie.findBasePrice(testPrices).intValue());
     }
 
     @Test
     public void calculateTotalCostCorrectly() {
         testHoodie.setBasePrice(TEST_HOODIE_BASE_PRICE);
-        int exampleTotalCost = Product.calculateTotalCost(testHoodie.getBasePrice(), testHoodie.getArtistMarkup(),
-                testHoodie.getQuantity());
+        int exampleTotalCost = testHoodie.calculateTotalCost();
         Assert.assertEquals(TEST_HOODIE_TOTAL_COST, exampleTotalCost);
     }
 }

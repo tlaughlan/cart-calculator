@@ -1,6 +1,5 @@
 package com.applicant.redbubble.cart_calculator.models;
 
-import com.applicant.redbubble.cart_calculator.services.PriceCalculator;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.apache.logging.log4j.LogManager;
@@ -63,57 +62,21 @@ public class Product {
         this.totalCost = totalCost;
     }
 
-    /**
-     * This method is used to loop through all of the appropriate base prices for this product, find the one which
-     * satisfies all of the options and then apply that price's base price to this product. It determines the match
-     * based on the following predicate:
-     *
-     *     Price must contain a value match for each of the options which is has in common with Product.
-     *
-     * For example: The below price and product would be a match, since they have the common options b, c, d and
-     * each of the price options contains a match for the values of the product options.
-     *
-     * PRODUCT OPTIONS           PRICE OPTIONS
-     *       a                        x
-     *       b 1                      y
-     *       c 2                      b 1, 4
-     *       d 3                      c 2, 6
-     *                                d 7, 3
-     *
-     * @param basePriceGroup - The appropriate group of prices for this product's product type.
-     */
-    public void applyBasePrice(List<BasePrice> basePriceGroup) {
-        for (BasePrice basePrice : basePriceGroup) {
-            int optionMatchCounter = 0;
-            int totalCommonOptions = PriceCalculator.countCommonOptions(this, basePrice);
-            if (totalCommonOptions > 0) {
-                Map<String, List<String>> basePriceOptions = basePrice.getOptions();
-                for (Map.Entry optionsPair : this.getOptions().entrySet()) {
-                    if (optionMatchCounter < totalCommonOptions) {
-                        if (basePriceOptions.containsKey(optionsPair.getKey())) {
-                            if (basePriceOptions.get(optionsPair.getKey()).contains(optionsPair.getValue())) {
-                                optionMatchCounter++;
-                            } else {
-                                break;
-                            }
-                        }
-                    }
-                }
-                if (optionMatchCounter == totalCommonOptions) {
-                    this.setBasePrice(basePrice.getBasePrice());
-                    logger.info(this.productDescription() +
-                            " was assigned BASE PRICE of " + basePrice.getBasePrice());
-                    return;
-                }
+    public Integer findBasePrice(List<BasePrice> basePriceGroup) {
+        for (BasePrice currentBasePrice : basePriceGroup) {
+            if (currentBasePrice.containsOptions(this.getOptions())) {
+                return currentBasePrice.getBasePrice();
             }
         }
+        logger.error(this.productDescription() + " could not find BASE PRICE.");
+        return null;
     }
 
     /**
      * The maths of this method is defined as: (base_price + round(base_price * artist_markup)) * quantity
      * where artist_markup is a int representing a percentage.
      */
-    public static Integer calculateTotalCost(int basePrice, int artistMarkup, int quantity) {
+    public Integer calculateTotalCost() {
         return (basePrice + Math.round(basePrice * (new Float(artistMarkup)/100))) * quantity;
     }
 

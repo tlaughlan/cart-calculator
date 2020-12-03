@@ -4,6 +4,7 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
 import java.util.List;
+import java.util.Map;
 
 public class Cart {
 
@@ -38,9 +39,9 @@ public class Cart {
         return this.getProductList().get(index);
     }
 
-    public static Integer calculateTotalCartPrice(Cart cart) {
+    public Integer calculateTotalCartPrice() {
         Integer totalCartPrice = 0;
-        for (Product product : cart.getProductList()) {
+        for (Product product : this.getProductList()) {
             if (product.getTotalCost() != null) {
                 totalCartPrice += product.getTotalCost();
             } else {
@@ -49,5 +50,24 @@ public class Cart {
             }
         }
         return totalCartPrice;
+    }
+
+    public void populateProductBasePrices(List<BasePrice> basePrices) {
+        Map<String, List<BasePrice>> groupedBasePrices = BasePrice.groupPricesByProductType(basePrices);
+        for (Product currentProduct : this.getProductList()) {
+            List<BasePrice> appropriateBasePriceGroup = groupedBasePrices.get(currentProduct.getProductType());
+            currentProduct.setBasePrice(currentProduct.findBasePrice(appropriateBasePriceGroup));
+        }
+    }
+
+    public void populateProductTotalCosts() {
+        for (Product currentProduct : this.getProductList()) {
+            if (currentProduct.getBasePrice() != null) {
+                currentProduct.setTotalCost(currentProduct.calculateTotalCost());
+            } else {
+                logger.error(currentProduct.productDescription() + " has BASE PRICE of null at time of total cost" +
+                        "population.");
+            }
+        }
     }
 }
