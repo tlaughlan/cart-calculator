@@ -1,14 +1,10 @@
 package com.applicant.redbubble.cart_calculator.models;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import java.util.Map;
 
 public class CartItem {
-
-    static final Logger logger = LogManager.getLogger(CartItem.class.getName());
 
     @JsonProperty("product-type")
     private String productType;
