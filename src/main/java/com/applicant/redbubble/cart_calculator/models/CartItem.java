@@ -30,7 +30,7 @@ public class CartItem {
     public String description() {
         return "Cart item with product type " + getProductType() + " and options " + getOptions().toString();
     }
-    
+
     public String getProductType() {
         return productType;
     }
