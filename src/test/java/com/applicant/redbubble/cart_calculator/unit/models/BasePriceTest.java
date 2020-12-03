@@ -36,28 +36,6 @@ public class BasePriceTest {
     }
 
     @Test
-    public void groupPricesByProductTypeCorrectly() {
-        Map<String, List<BasePrice>> groupedBasePrices = BasePrice.groupPricesByProductType(testPrices);
-        Assert.assertEquals(3, groupedBasePrices.size());
-        Assert.assertTrue(groupedBasePrices.containsKey(Constants.PRODUCT_TYPE_HOODIE));
-        Assert.assertTrue(groupedBasePrices.containsKey(Constants.PRODUCT_TYPE_STICKER));
-        Assert.assertTrue(groupedBasePrices.containsKey(Constants.PRODUCT_TYPE_LEGGINGS));
-    }
-
-    @Test
-    public void returnNullWhenGroupingOnNullBasePriceList() {
-        testPrices = null;
-        Assert.assertNull(BasePrice.groupPricesByProductType(testPrices));
-    }
-
-    @Test
-    public void returnNullWhenGroupingOnEmptyBasePriceList() {
-        testPrices.removeAll(testPrices);
-        Assert.assertEquals(0, testPrices.size());
-        Assert.assertNull(BasePrice.groupPricesByProductType(testPrices));
-    }
-
-    @Test
     public void testContainsOptionsTrue() {
         Assert.assertTrue(testPrices.get(0).containsOptions(dummyProductOptionsTrue));
     }

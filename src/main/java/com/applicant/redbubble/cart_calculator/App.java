@@ -10,6 +10,8 @@ import org.apache.logging.log4j.LogManager;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class App {
 
@@ -23,10 +25,12 @@ public class App {
 
         List<CartItem> cartItems = FileConsumer.readCartFile(new File(args[0]));
         List<BasePrice> prices = FileConsumer.readBasePriceFile(new File (args[1]));
+        Map<String, List<BasePrice>> groupedPrices = groupPricesByProductType(prices);
 
         List<PricedCartItem> pricedCartItems = new ArrayList<>();
         for (CartItem currentCartItem : cartItems) {
-            pricedCartItems.add(new PricedCartItem(currentCartItem, prices));
+            List<BasePrice> pricingGroup = groupedPrices.get(currentCartItem.getProductType());
+            pricedCartItems.add(new PricedCartItem(currentCartItem, pricingGroup));
         }
 
         Integer totalCartCost = 0;
@@ -36,5 +40,14 @@ public class App {
 
         logger.info("Your total cart price is " + totalCartCost + "\n");
         System.out.println(totalCartCost);
+    }
+
+    public static Map<String, List<BasePrice>> groupPricesByProductType(List<BasePrice> basePrices) {
+        if (basePrices != null && basePrices.size() != 0) {
+            return basePrices.stream().collect(Collectors.groupingBy(BasePrice::getProductType));
+        } else {
+            logger.error("Problem occurred while grouping base prices.");
+            return null;
+        }
     }
 }
