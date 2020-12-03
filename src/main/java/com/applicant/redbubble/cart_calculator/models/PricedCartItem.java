@@ -13,14 +13,6 @@ public class PricedCartItem extends CartItem{
 
     private Integer totalPrice;
 
-    public Integer getBasePrice() {
-        return basePrice;
-    }
-
-    public Integer getTotalPrice() {
-        return totalPrice;
-    }
-
     public PricedCartItem(CartItem cartItem, List<BasePrice> basePriceGroup) {
         super(
             cartItem.getProductType(),
@@ -54,5 +46,13 @@ public class PricedCartItem extends CartItem{
             logger.error(description() + " had BASE PRICE of NULL at time of TOTAL PRICE calculation.");
             return null;
         }
+    }
+
+    public Integer getBasePrice() {
+        return basePrice;
+    }
+
+    public Integer getTotalPrice() {
+        return totalPrice;
     }
 }

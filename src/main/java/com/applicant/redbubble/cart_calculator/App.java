@@ -3,13 +3,11 @@ package com.applicant.redbubble.cart_calculator;
 import com.applicant.redbubble.cart_calculator.models.BasePrice;
 import com.applicant.redbubble.cart_calculator.models.CartItem;
 import com.applicant.redbubble.cart_calculator.models.OrderSummary;
-import com.applicant.redbubble.cart_calculator.models.PricedCartItem;
 import com.applicant.redbubble.cart_calculator.services.FileConsumer;
 import org.apache.logging.log4j.Logger;
 import org.apache.logging.log4j.LogManager;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

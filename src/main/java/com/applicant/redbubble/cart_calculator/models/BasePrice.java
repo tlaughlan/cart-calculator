@@ -15,18 +15,6 @@ public class BasePrice {
     @JsonProperty("base-price")
     private int basePrice;
 
-    public String getProductType() {
-        return productType;
-    }
-
-    public Map<String, List<String>> getOptions() {
-        return options;
-    }
-
-    public int getBasePrice() {
-        return basePrice;
-    }
-
     /**
      * This method will loop through all of the options lists for this base price. If each options list contains a match
      * with the product options then true is returned. The method fails early as soon as an option finds no matches.
@@ -41,5 +29,17 @@ public class BasePrice {
             }
         }
         return true;
+    }
+
+    public String getProductType() {
+        return productType;
+    }
+
+    public Map<String, List<String>> getOptions() {
+        return options;
+    }
+
+    public int getBasePrice() {
+        return basePrice;
     }
 }

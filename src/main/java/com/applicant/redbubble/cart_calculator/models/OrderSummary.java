@@ -10,14 +10,6 @@ public class OrderSummary {
 
     private List<PricedCartItem> pricedCartItems;
 
-    public Integer getOrderTotal() {
-        return orderTotal;
-    }
-
-    public List<PricedCartItem> getPricedCartItems() {
-        return pricedCartItems;
-    }
-
     public OrderSummary(List<CartItem> cartItems, Map<String, List<BasePrice>> groupedBasePrices) {
         this.pricedCartItems = initialisePricedCartItems(cartItems, groupedBasePrices);
         this.orderTotal = calculateOrderTotal(getPricedCartItems());
@@ -39,5 +31,13 @@ public class OrderSummary {
             totalCartCost += currentPricedCartItem.getTotalPrice();
         }
         return totalCartCost;
+    }
+
+    public Integer getOrderTotal() {
+        return orderTotal;
+    }
+
+    public List<PricedCartItem> getPricedCartItems() {
+        return pricedCartItems;
     }
 }

@@ -18,6 +18,19 @@ public class CartItem {
     @JsonProperty("quantity")
     private int quantity;
 
+    public CartItem() {}
+
+    public CartItem(String productType, Map<String, String> options, int artistMarkup, int quantity) {
+        this.productType = productType;
+        this.options = options;
+        this.artistMarkup = artistMarkup;
+        this.quantity = quantity;
+    }
+
+    public String description() {
+        return "Cart item with product type " + getProductType() + " and options " + getOptions().toString();
+    }
+    
     public String getProductType() {
         return productType;
     }
@@ -32,18 +45,5 @@ public class CartItem {
 
     public int getQuantity() {
         return quantity;
-    }
-
-    public CartItem() {}
-
-    public CartItem(String productType, Map<String, String> options, int artistMarkup, int quantity) {
-        this.productType = productType;
-        this.options = options;
-        this.artistMarkup = artistMarkup;
-        this.quantity = quantity;
-    }
-
-    public String description() {
-        return "Cart item with product type " + getProductType() + " and options " + getOptions().toString();
     }
 }
