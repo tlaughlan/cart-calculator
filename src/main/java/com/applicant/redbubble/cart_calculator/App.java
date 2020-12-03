@@ -33,6 +33,12 @@ public class App {
         System.out.println(orderSummary.getOrderTotal());
     }
 
+    /**
+     * Group the base price list into sub lists based on product type. This allows for reduction of time complexity when
+     * searching for a match later.
+     * @param basePrices
+     * @return
+     */
     public static Map<String, List<BasePrice>> groupPricesByProductType(List<BasePrice> basePrices) {
         if (basePrices != null && basePrices.size() != 0) {
             return basePrices.stream().collect(Collectors.groupingBy(BasePrice::getProductType));

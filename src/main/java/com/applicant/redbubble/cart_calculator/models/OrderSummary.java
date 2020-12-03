@@ -15,6 +15,14 @@ public class OrderSummary {
         this.orderTotal = calculateOrderTotal(getPricedCartItems());
     }
 
+    /**
+     * This method loops through all the of cart items which have been read in from the input file. These are made into
+     * PricedCartItem objects, which will be assigned a base price and total price. This is determined by the base
+     * prices, which have been grouped by productType in order to reduce time complexity.
+     * @param cartItems
+     * @param groupedBasePrices
+     * @return
+     */
     private List<PricedCartItem> initialisePricedCartItems
             (List<CartItem> cartItems, Map<String, List<BasePrice>> groupedBasePrices) {
         List<PricedCartItem> pricedCartItems = new ArrayList<>();
